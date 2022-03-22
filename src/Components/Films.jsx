@@ -1,0 +1,31 @@
+import React, { useState, useEffect } from "react";
+
+const Films = () => {
+    const [films, setFilms] = useState([]);
+
+    useEffect(() => {
+        fetch('https://ghibliapi.herokuapp.com/films')
+            .then((films) => films.json())
+            .then((films) => setFilms(films))
+            .catch((err) => console.log(err));
+    });
+
+    return (
+        <>
+            {films.map((film) => (
+                <div className='card w-50 m-2' key={film.id}>
+                    <img className='card-top' src={film.image} />
+                    <div className='card-body'>
+                        <h5 className='card-title'>{film.title}</h5>
+                        <h6 className='card-subtitle mb-2 text-muted'>{film.director} - {film.release_date}</h6>
+                        <p className='card-text'>{film.description}</p>
+                        <h6 className='card-subtitle'>{film.rt_score > 50 ? <span className='text-success'>{film.rt_score}</span> : <span className='text-danger'>{film.rt_score}</span> }</h6>
+                        <a href={film.url} className='card-link'>Read More</a>
+                    </div>
+                </div>
+            ))}
+        </>
+    )
+}
+
+export default Films;
